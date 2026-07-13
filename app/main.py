@@ -13,6 +13,7 @@ def create_item(item: ItemCreate):
 
 @app.get("/items", response_model=list[Item])
 def list_items():
+    print("Listing items")
     return repo.list()
 
 
