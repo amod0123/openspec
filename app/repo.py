@@ -34,3 +34,12 @@ class InMemoryRepo:
                     self._items[idx] = it
                     return it
             raise KeyError("item not found")
+
+    def delete(self, item_id: int) -> None:
+        """Delete an item by id. Raises KeyError if not found."""
+        with self._lock:
+            for idx, it in enumerate(self._items):
+                if it.id == item_id:
+                    self._items.pop(idx)
+                    return
+            raise KeyError("item not found")

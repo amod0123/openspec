@@ -43,3 +43,28 @@ def test_update_nonexistent():
     client = TestClient(app)
     r = client.put("/items/9999", json={"name": "nope"})
     assert r.status_code == 404
+
+
+def test_delete_item():
+    client = TestClient(app)
+
+    # Add an item
+    r = client.post("/items", json={"name": "removable", "description": "to be deleted"})
+    assert r.status_code == 201
+    created = r.json()
+    item_id = created["id"]
+
+    # Delete the item
+    r2 = client.delete(f"/items/{item_id}")
+    assert r2.status_code == 204
+
+    # Ensure it's gone
+    r3 = client.get("/items")
+    items = r3.json()
+    assert all(i["id"] != item_id for i in items)
+
+
+def test_delete_nonexistent():
+    client = TestClient(app)
+    r = client.delete("/items/9999")
+    assert r.status_code == 404
