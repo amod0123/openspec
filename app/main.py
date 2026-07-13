@@ -34,6 +34,11 @@ def delete_item(item_id: int):
         raise HTTPException(status_code=404, detail="Item not found")
 
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 if __name__ == "__main__":
     # Default entrypoint to run the app on port 8001
     import uvicorn

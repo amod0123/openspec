@@ -68,3 +68,10 @@ def test_delete_nonexistent():
     client = TestClient(app)
     r = client.delete("/items/9999")
     assert r.status_code == 404
+
+
+def test_health_endpoint():
+    client = TestClient(app)
+    r = client.get("/health")
+    assert r.status_code == 200
+    assert r.json() == {"status": "ok"}
