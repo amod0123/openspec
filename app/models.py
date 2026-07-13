@@ -10,3 +10,9 @@ class ItemCreate(BaseModel):
 
 class Item(ItemCreate):
     id: int
+
+
+class ItemUpdate(BaseModel):
+    # For updates, fields are optional but keep same validation for `name` when provided
+    name: Optional[str] = Field(None, min_length=4, max_length=9)
+    description: Optional[str] = None

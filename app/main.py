@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from app.models import ItemCreate, Item
+from fastapi import FastAPI, HTTPException
+from app.models import ItemCreate, Item, ItemUpdate
 from app.repo import InMemoryRepo
 
 app = FastAPI()
@@ -14,6 +14,14 @@ def create_item(item: ItemCreate):
 @app.get("/items", response_model=list[Item])
 def list_items():
     return repo.list()
+
+
+@app.put("/items/{item_id}", response_model=Item)
+def update_item(item_id: int, item: ItemUpdate):
+    try:
+        return repo.update(item_id, item)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Item not found")
 
 
 if __name__ == "__main__":

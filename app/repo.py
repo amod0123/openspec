@@ -19,3 +19,18 @@ class InMemoryRepo:
     def list(self) -> List[Item]:
         with self._lock:
             return list(self._items)
+
+    def update(self, item_id: int, item_update) -> Item:
+        """Update an existing item. `item_update` may have optional attributes."""
+        with self._lock:
+            for idx, it in enumerate(self._items):
+                if it.id == item_id:
+                    # apply provided fields
+                    name = getattr(item_update, "name", None)
+                    if name is not None:
+                        it.name = name
+                    if hasattr(item_update, "description"):
+                        it.description = item_update.description
+                    self._items[idx] = it
+                    return it
+            raise KeyError("item not found")
